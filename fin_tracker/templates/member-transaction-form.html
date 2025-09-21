@@ -1,0 +1,84 @@
+{% extends 'index.html' %}
+
+{% load static %}
+{% block head %}
+    <title>
+        {% block title %}
+        {% if instance %}Edit{% else %}Add{% endif %} Member Transaction
+        {% endblock title %}
+    </title>
+{% endblock head %}
+
+{% block body %}
+    <div class="container py-5">
+        <h2 class='mb-4'><a href="{% url 'home' %}" style="text-decoration:none;">Home</a> < <a href="{% url 'member-transaction-list' %}" style="text-decoration:none;">Transaction List</a> < Member Transaction Form</h2>
+        <div class="card shadow-sm border-0">
+            <div class="card-header bg-success text-white">
+                <h4 class="mb-0">{% if instance %}Edit{% else %}Add{% endif %} Member Transaction</h4>
+            </div>
+            <div class="card-body">
+
+                <form method="POST">
+                    {% csrf_token %}
+                    <div class="row g-3">
+                        <!-- Context -->
+                        <div class="col-md-6">
+                            <label for="id_context" class="form-label">Context</label>
+                            {{ form.context }}
+                        </div>
+
+                        <!-- Member -->
+                        <div class="col-md-6">
+                            <label for="id_roll" class="form-label">Member</label>
+                            {{ form.member }}
+                            <p class='text-danger'>{{form.member.error}}</p>
+                        </div>
+                        
+                        <!-- Due -->
+                        <div class="col-md-6">
+                            <label for="id_due" class="form-label">Due</label>
+                            {{ form.due }}
+                        </div>
+
+                        <!-- Account No -->
+                        <div class="col-md-6">
+                            <label for="id_account_no" class="form-label">Account No</label>
+                            {{ form.account_no }}
+                            <p class='text-danger'>{{ form.account_no.help_text }}</p>
+                        </div>
+
+                        <!-- Transaction Id -->
+                        <div class="col-md-6">
+                            <label for="id_transaction_id" class="form-label">Transaction Id</label>
+                            {{ form.transaction_id }}
+                        </div>
+
+                        <!-- Is Paid -->
+                        <div class="col-md-6">
+                            <label for="id_is_paid" class="form-check-label">Payment Status</label>
+                            {{ form.is_paid }}
+                        </div>
+
+                        <!-- Took Loan -->
+                        <div class="col-md-6">
+                            <label for="id_took_loan" class="form-check-label">Loan Status</label>
+                            {{ form.took_loan }}
+                        </div>
+
+                        <!--Payment Date  -->
+                        <div class="col-md-6">
+                            <label for="id_date" class="form-label">Payment Date</label>
+                            {{ form.date }}
+                        </div>
+                    </div>
+
+                    <div class="mt-4">
+                        <button type="submit" class="btn btn-success">{% if instance %}Update{% else %}Create{% endif %}</button>
+                        <a href="{% url 'member-transaction-list' %}" class="btn btn-secondary">Cancel</a>
+                    </div>
+                </form>
+
+            </div>
+        </div>
+    </div>
+{% endblock body %}

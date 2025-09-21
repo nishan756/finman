@@ -1,0 +1,84 @@
+{% extends 'index.html' %}
+
+{% block head %}
+<title>{% block title %}{{ transaction.member }} - Transaction's Info{% endblock title %}</title>
+{% endblock head %}
+
+{% block body %}
+<div class="container py-5">
+    <h2 class='mb-4'><a href="{% url 'home' %}" style="text-decoration:none;">Home</a><a href="{% url 'member-transaction-list' %}" style="text-decoration:none;"> < Transaction List</a> < Transacton Detail</h2>
+    <div class="card shadow-sm border-0">
+        <div class="card-header bg-primary text-white">
+            <h4 class="mb-0">{{transaction.member}}'s Transaction</h4>
+        </div>
+        <div class="card-body">
+            <div class="row mb-3">
+                <div class="col-md-4"><strong>Member:</strong></div>
+                <div class="col-md-8"><a href="{% url 'member-detail' transaction.member.id %}" style="text-decoration:none;">{{ transaction.member }}</a></div>
+            </div>
+
+            <div class="row mb-3">
+                <div class="col-md-4"><strong>Context:</strong></div>
+                <div class="col-md-8"><a href="/fin_tracker/payment-context-detail/{{transaction.context.id}}/" style="text-decoration:none;">{{ transaction.context }}</a></div>
+            </div>
+
+            <div class="row mb-3">
+                <div class="col-md-4"><strong>Amount:</strong></div>
+                <div class="col-md-8">{{ transaction.amount }} ৳</div>
+            </div>
+
+            <div class="row mb-3">
+                <div class="col-md-4"><strong>Due:</strong></div>
+                <div class="col-md-8">{{ transaction.due }} ৳</div>
+            </div>
+
+            <div class="row mb-3">
+                <div class="col-md-4"><strong>Account No:</strong></div>
+                <div class="col-md-8">{{ transaction.account_no }}</div>
+            </div>
+
+            <div class="row mb-3">
+                <div class="col-md-4"><strong>Transaction Id:</strong></div>
+                <div class="col-md-8">{{ transaction.transaction_id }}</div>
+            </div>
+
+            <div class="row mb-3">
+                <div class="col-md-4"><strong>Payment Status:</strong></div>
+                <div class="col-md-8">{% if transaction.is_paid %}Paid{% else %}Not Paid{% endif %}</div>
+            </div>
+
+            <div class="row mb-3">
+                <div class="col-md-4"><strong>Took Loan:</strong></div>
+                <div class="col-md-8">{% if transaction.took_loan %}Yes{% else %}No{% endif %}</div>
+            </div>
+
+            <div class="row mb-3">
+                <div class="col-md-4"><strong>Payment Date:</strong></div>
+                <div class="col-md-8">
+                    {% if transaction.date %}
+                        {{ transaction.date|date:"F j, Y" }} at {{transaction.date|time}}
+                    {% else %}
+                        <span class="text-muted">Not Available</span>
+                    {% endif %}
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <div class="mt-4">
+        <a href="{% url 'member-transaction-list' %}" class="btn btn-secondary">Back to Transaction List</a>
+        {% if perms.fin_tracker.change_member_transaction_detail %}
+            <a href="/fin_tracker/edit-member-transaction/{{transaction.id}}/" class="btn btn-warning" onclick="return confirm('Are you sure, you want to edit this transaction?');">Edit Transaction</a>
+        {% endif %}
+
+        {% if perms.fin_tracker.delete_member_transaction_detail %}
+            <a href="/fin_tracker/delete-member-transaction/{{transaction.id}}/" class="btn btn-danger spinner-button"
+                onclick="return confirm('Are you sure, you want to delete this transaction?');">
+                🗑️ Delete
+            </a>
+        {% endif %}
+    </div>
+</div>
+
+{% endblock body %}

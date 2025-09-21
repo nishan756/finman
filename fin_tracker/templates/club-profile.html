@@ -1,0 +1,86 @@
+{% extends 'index.html' %}
+{% block head %}
+<title>{% block title %}{{club.club_name}}{% endblock title %}</title>
+{% endblock head %}
+{% block body %}
+<div class="container my-5">
+    <!-- Club Profile Card -->
+    <div class="card shadow-lg border-0 mb-4">
+        <div class="row g-0">
+            <!-- Club Logo -->
+            <div class="col-md-3 d-flex align-items-center justify-content-center bg-light">
+                {% if club.logo %}
+                    <img src="{{ club.logo.url }}" alt="{{ club.name }}" class="img-fluid rounded" style="max-height: 150px;">
+                {% else %}
+                    <div class="text-muted">No Logo</div>
+                {% endif %}
+            </div>
+
+            <!-- Club Info -->
+            <div class="col-md-9">
+                <div class="card-body">
+                    <h3 class="card-title">{{ club.club_name }}</h3>
+                    <p class="card-text">{{ club.details }}</p>
+                    <p class="card-text">
+                        <strong>Email:</strong> {{ club.email }} <br>
+                        <strong>Phone:</strong> {{ club.phone }}
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Notices Filter -->
+    <div class="card shadow-sm border-0 mb-3">
+        <div class="card-body">
+            <form method="GET" class="row g-2">
+                {% csrf_token %}
+                <div class="col-md-4">
+                    <input type="text" name="title" placeholder="Search by title" class="form-control">
+                </div>
+                <div class="col-md-3">
+                    <input type="date" name="from_date" class="form-control">
+                </div>
+                <div class="col-md-3">
+                    <input type="date" name="to_date" class="form-control">
+                </div>
+                <div class="col-md-2">
+                    <button type="submit" class="btn btn-primary w-100">Filter</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Notices List -->
+    <div class="card shadow-sm border-0">
+        <div class="card-body">
+            <h4 class="mb-3">Notices</h4>
+            {% if notices %}
+                <table class="table table-bordered table-hover">
+                    <thead class="table-light">
+                        <tr>
+                            <th>Title</th>
+                            <th>Date</th>
+                            <th>Amount</th>
+                            <th>Details</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for notice in notices %}
+                            <tr>
+                                <td>{{ notice.title }}</td>
+                                <td>{{ notice.posted_at|date:"M d, Y" }}</td>
+                                <td>{{ notice.amount }}</td>
+                                <td><a href="/fin_tracker/payment-context-detail/{{notice.id}}/"><button class='btn btn-primary'>View</button></a></td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            {% else %}
+                <p class="text-muted">No notices available.</p>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+{% endblock body %}

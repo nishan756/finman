@@ -1,0 +1,122 @@
+{% extends 'index.html' %}
+
+{% load static %}
+{% block head %}
+    <title>
+        {% block title %}
+        {% if instance %}Edit{% else %}Add{% endif %} Member
+        {% endblock title %}
+    </title>
+{% endblock head %}
+
+{% block body %}
+    <div class="container py-5">
+        <h2 class="mb-4"><a href="{% url 'home' %}" style="text-decoration:none;">Home < <a href="{% url 'member-list' %}" style="text-decoration:none;">Member List</a></a> < {% if instance %}Update {% else %}Add{% endif %} Member</h2>
+        <div class="card shadow-sm border-0">
+            <div class="card-header bg-success text-white">
+                <h4 class="mb-0">Member Form</h4>
+            </div>
+            <div class="card-body">
+
+                <form method="POST" novalidate>
+                    {% csrf_token %}
+                    <div class="row g-3">
+                        <!-- Name -->
+                        <div class="col-md-6">
+                            <label for="id_name" class="form-label">Name</label>
+                            {{ form.name }}
+                            <p class='text-danger'>{{form.name.help_text}}</p>
+                        </div>
+
+                        <!-- Roll -->
+                        <div class="col-md-6">
+                            <label for="id_roll" class="form-label">Roll</label>
+                            {{ form.roll }}
+                            <p class='text-danger'>{{form.roll.help_text}}</p>
+                            {% for error in form.roll.errors %}
+                            <div class='text-danger'>{{error}}</div>
+                            {% endfor %}
+                        </div>
+
+                        <!-- Department -->
+                        <div class="col-md-6">
+                            <label for="id_department" class="form-label">Department</label>
+                            {{ form.department }}
+                            {% for error in form.department.errors %}
+                            <div class='text-danger'>{{error}}</div>
+                            {% endfor %}
+                        </div>
+
+                        <!-- Semester -->
+                        <div class="col-md-6">
+                            <label for="id_semester" class="form-label">Semester</label>
+                            {{ form.semester }}
+                            <p class='text-danger'>{{form.semester.help_text}}</p>
+
+                        </div>
+
+                        <!-- Shift -->
+                        <div class="col-md-6">
+                            <label for="id_shift" class="form-label">Shift</label>
+                            {{ form.shift }}
+
+                        </div>
+
+                        <!-- Session -->
+                        <div class="col-md-6">
+                            <label for="id_session" class="form-label">Session</label>
+                            {{ form.session }}
+                            <p class='text-danger'>{{form.session.help_text}}</p>
+                            {% for error in form.session.errors %}
+                            <div class='text-danger'>{{error}}</div>
+                            {% endfor %}
+                        </div>
+
+                        <!-- Email -->
+                        <div class="col-md-6">
+                            <label for="id_email" class="form-label">Email</label>
+                            {{ form.email }}
+                            <p class='text-danger'>{{form.email.help_text}}</p>
+                            {% for error in form.email.errors %}
+                            <div class='text-danger'>{{error}}</div>
+                            {% endfor %}
+                        </div>
+
+                        <!-- Contact -->
+                        <div class="col-md-6">
+                            <label for="id_contact" class="form-label">Contact</label>
+                            {{ form.contact }}
+                            <p class='text-danger'>{{form.contact.help_text}}</p>
+                            {% for error in form.contact.errors %}
+                            <div class='text-danger'>{{error}}</div>
+                            {% endfor %}
+                        </div>
+
+                        <!-- Joined At -->
+                        <div class="col-md-6">
+                            <label for="id_joined_at" class="form-label">Joined At</label>
+                            {{ form.joined_at }}
+                            <p class='text-danger'>{{form.joined_at.help_text}}</p>
+                        </div>
+
+                        <div class="alert alert-warning">
+                            <p>If the department or session is not in the list, fill in the form below. Otherwise, it may create complications in verifying the data in the form.</p>
+                            <label class="form-label">Department</label>
+                            {{form.new_department}}
+                            <br/>
+                            <label class="form-label">Session</label>
+                            {{form.new_session}}
+                        </div>
+
+                    </div>
+
+                    <div class="mt-4">
+                        <button type="submit" class="btn btn-success">{% if instance %}Update {% else %}Create{% endif %}</button>
+                        <a href="{% url 'member-list' %}" class="btn btn-secondary">Cancel</a>
+                    </div>
+                </form>
+
+            </div>
+        </div>
+    </div>
+{% endblock body %}

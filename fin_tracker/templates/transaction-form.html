@@ -1,0 +1,81 @@
+{% extends 'index.html' %}
+
+{% load static %}
+{% block head %}
+    <title>
+        {% block title %}
+        {% if instance %}Edit{% else %}Add{% endif %} Transaction
+        {% endblock title %}
+    </title>
+{% endblock head %}
+
+{% block body %}
+    <div class="container py-5">
+        <h2 class="mb-4"><a href="{% url 'home' %}" style="text-decoration:none;">Home < <a href="{% url 'transaction-list' %}" style="text-decoration:none;">Transaction List</a></a> < {% if instance %}Update {% else %}Add{% endif %} Transaction</h2>
+        <div class="card shadow-sm border-0">
+            <div class="card-header bg-success text-white">
+                <h4 class="mb-0">Transaction Form</h4>
+            </div>
+            <div class="card-body">
+
+                <form method="POST">
+                    {% csrf_token %}
+                    <div class="row g-3">
+                        <!-- Title -->
+                        <div class="col-md-6">
+                            <label for="id_title" class="form-label">{{form.title.label_tag}}</label>
+                            {{ form.title }}
+                            {% for error in form.title.errors %}
+                            <div class='text-danger'>{{form.title.error}}</div>
+                            {% endfor %}
+                        </div>
+
+                        <!-- Transaction Type -->
+                        <div class="col-md-6">
+                            <label for="id_transaction_type" class="form-label">{{form.transaction_type.label_tag}}</label>
+                            {{ form.transaction_type }}
+                            <p class='text-danger'>{{form.roll.help_text}}</p>
+                            {% for error in form.transaction_type.errors %}
+                            <div class='text-danger'>{{error}}</div>
+                            {% endfor %}
+                        </div>
+
+                        <!-- Amount -->
+                        <div class="col-md-6">
+                            <label for="id_amount" class="form-label">{{form.amount.label_tag}}</label>
+                            {{ form.amount }}
+                            {% for error in form.amount.errors %}
+                            <div class='text-danger'>{{error}}</div>
+                            {% endfor %}
+                        </div>
+
+                        <!-- Date  -->
+                        <div class="col-md-6">
+                            <label for="id_date" class="form-label">{{form.date.label_tag}}</label>
+                            {{ form.date }}
+                            {% for error in form.date.errors %}
+                            <div class='text-danger'>{{error}}</div>
+                            {% endfor %}
+                        </div>
+
+                        
+
+                        <!-- Detail -->
+                        <div class="col-md-6">
+                            <label for="id_detail" class="form-label">{{form.detail.label_tag}}</label>
+                            {{ form.detail }}
+                        </div>
+
+
+                    </div>
+
+                    <div class="mt-4">
+                        <button type="submit" class="btn btn-success">{% if instance %}Update {% else %}Create{% endif %}</button>
+                        <a href="{% url 'transaction-detail' form.instance.id %}" class="btn btn-secondary">Cancel</a>
+                    </div>
+                </form>
+
+            </div>
+        </div>
+    </div>
+{% endblock body %}

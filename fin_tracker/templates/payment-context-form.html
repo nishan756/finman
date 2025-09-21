@@ -1,0 +1,91 @@
+{% extends 'index.html' %}
+
+{% block head %}
+    <title>
+        {% block title %}
+        {% if instance %}Upate this {% else %}Add A New{% endif %} Payment Context
+        {% endblock title %}
+    </title>
+{% endblock head %}
+
+{% block body %}
+
+
+    <div class="container py-5">
+        <div class="card shadow-sm border-0">
+            <div class="card-header bg-success text-white">
+                <h4 class="mb-0">{% if instance %}Upate this {% else %}Add A New{% endif %}  Payment Context</h4>
+            </div>
+            <div class="card-body">
+
+                <form method="POST" validate>
+                    {% csrf_token %}
+                    <div class="row g-3">
+                        <!-- Title -->
+                        <div class="col-md-6">
+                            <label for="id_title" class="form-label">Title</label>
+                            {{ form.title }}
+                        </div>
+
+                        <!-- Start From -->
+                        <div class="col-md-6">
+                            <label for="id_start_date" class="form-label">Start From</label>
+                            {{ form.start_date }}
+                        </div>
+
+                        <!-- End on -->
+                        <div class="col-md-6">
+                            <label for="id_end_date" class="form-label">End on</label>
+                            {{ form.end_date }}
+                        </div>
+
+                        {% if instance %}
+                        <!-- Posted At -->
+                        <div class="col-md-6">
+                            <label for="id_posted_at" class="form-label">Posted At</label>
+                            {{ form.posted_at }}
+                        </div>
+                        {% endif %}
+
+                        <!-- Amount -->
+                        <div class="col-md-6">
+                            <label for="id_amount" class="form-label">Amount</label>
+                            {{ form.amount }}
+                        </div>
+
+                        <!-- Detail -->
+                        <div class="col-md-6">
+                            <label for="id_detail" class="form-label">Detail</label>
+                            {{ form.detail }}
+                        </div>
+
+                        <!-- is-active -->
+                        <div class="col-md-6">
+                            <label for="id_is_active" class="form-label">Active</label>
+                            {{ form.is_active }}
+                        </div>
+
+                    </div>
+
+                    <div class="mt-4">
+                        <button type="submit" class="btn btn-success">{% if  instance %}Update{% else %}Create{% endif %}</button>
+                        <a href="{% url 'payment-context-list' %}" class="btn btn-secondary">Cancel</a>
+                    </div>
+                </form>
+
+                {% if form.errors %}
+                    <div class="alert alert-danger">
+                        <ul>
+                        {% for field, errors in form.errors.items %}
+                            <li><strong>{{ field|capfirst }}:</strong> {{ errors|join:", " }}</li>
+                        {% endfor %}
+                        </ul>
+                    </div>
+                {% endif %}
+
+            </div>
+        </div>
+    </div>
+
+
+{% endblock body %}

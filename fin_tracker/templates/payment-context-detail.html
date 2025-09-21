@@ -1,0 +1,45 @@
+{% extends 'index.html' %}
+{% block head %}
+    <title>
+        {% block title %}
+            {{context.title}}
+        {% endblock title %}
+    </title>
+{% endblock head %}
+{% block body %}
+
+
+    <div class="container mt-5" style="margin-bottom:30px;">
+        <h2 class='mb-4'><a href="{% url 'home' %}" style="text-decoration:none;">Home</a> < <a href="{% url 'payment-context-list' %}" style="text-decoration:none;">Payment Contexts</a> < {{context.title}}</h2>
+        <div class="card shadow rounded">
+            <div class="card-header bg-primary text-white">
+                <h4>{{ context.title }}</h4>
+            </div>
+            <div class="card-body">
+
+                <!-- ✅ Context Info -->
+                <p><strong>Amount:</strong> {{ context.amount }} ৳</p>
+                <p><strong>Start Date:</strong> {{ context.start_date }}</p>
+                <p><strong>End Date:</strong> {{ context.end_date }}</p>
+                <p><strong>Description:</strong> {{ context.detail|safe }}</p>
+
+                <!-- ✅ Action buttons -->
+                <div class="mt-4">
+                    <a href="{% url 'payment-context-list' %}" class="btn btn-secondary">⬅️ Back to List</a>
+
+                    {% if perms.fin_tracker.change_payment_context %}
+                    <a href="{% url 'edit-payment-context' context.id %}" class="btn btn-warning">✏️ Edit</a>
+                    {% endif %}
+
+                    {% if perms.fin_tracker.delete_payment_context %}
+                    <a href="{% url 'delete-payment-context' context.id %}" class="btn btn-danger"
+                    onclick="return confirm('Are you sure, you want to delete this context?');">
+                        🗑️ Delete
+                    </a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock body %}

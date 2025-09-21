@@ -1,0 +1,119 @@
+{% extends 'index.html' %}
+{% load static %}
+{% block head %}
+    <title>{% block title %}Member Transactions{% endblock title %}</title>
+{% endblock head %}
+{% block body %}
+    <div class="container py-4">
+        <h2 class="mb-4"><a href="{% url 'home'%}" style='text-decoration:none;'>Home < </a>Member Transations</h2>
+
+        <!--Add member and department-->
+        {% if request.user.is_authenticated %}
+        <div style="margin-bottom: 20px;">
+            {% if perms.fin_tracker.add_member %}
+            <a href="{% url 'create-member-transaction' %}" class="btn btn-primary">➕ Add Member Transaction</a>
+            {% endif %}
+        </div>
+        {% endif %}
+
+        <!-- Filter Form -->
+        <form method="GET" class="row g-3 mb-4 bg-white p-3 rounded shadow-sm">
+
+            <div class="col-md-2">
+                <input type='text' class='form-control' name='transaction_id' placeholder='Transaction id'></input>
+            </div>
+
+            {% if request.user.is_authenticated %}
+
+            <div class="col-md-2">
+                <input name='member' placeholder="Search Member" class='form-control'></input>
+            </div>
+
+            <div class="col-md-2">
+                <select name="context" class="form-select">
+                    <option value="">All Contexts</option>
+                    {% for context in contexts %}
+                        <option value="{{context.id}}">{{context.title}}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div class="col-md-2">
+                <select name="semester" class="form-select">
+                    <option value="">All Semester</option>
+                    {% for sem in semesters %}
+                        <option value="{{sem}}">{{sem}}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div class="col-md-2">
+                <select name="session" class="form-select">
+                    <option value="">All Session</option>
+                    {% for session in sessions %}
+                        <option value="{{session.id}}">{{session.session}}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div class="col-md-2">
+                <select name="department" class="form-select">
+                    <option value="">All Department</option>
+                    {% for department in departments %}
+                        <option value="{{department.id}}">{{department.name}}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            {% endif %}
+
+            <div class="col-md-1 d-grid">
+                <button type="submit" class="btn btn-primary">Filter</button>
+            </div>
+        </form>
+
+        <!-- Member Table -->
+        <div class="table-responsive bg-white shadow-sm rounded">
+            <table class="table table-bordered table-hover mb-0">
+                <thead class="table-light">
+                    <tr>
+                        <th>Member</th>
+                        <th>Context</th>
+                        <th>Payment Status</th>
+                        <th>Loan Status</th>
+                        <th>Payment At</th>
+                        <th>Detail</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% if transaction %}
+                    <tr>
+                        <td><a href="{% url 'member-detail' transaction.member.id %}" style="text-decoration:none;">{{ transaction.member }}</a></td>
+                        <td>{{ transaction.context }}</td>
+                        <td>{% if transaction.is_paid %}Paid{% else %}Not Paid{% endif %}</td>
+                        <td>{% if transaction.took_loan %}Yes{% else %}No{% endif %}</td>
+                        <td>{{ transaction.date|date }} at {{transaction.date|time}}</td>
+                        <td><a href="{% url 'member-transaction-detail' transaction.id %}" class='btn btn-primary'>View</a></td>
+                    </tr>
+                    {% endif %}
+
+                    {% if request.user.is_authenticated %}
+                    {% for transaction in transactions %}
+                        <tr>
+                            <td><a href="{% url 'member-detail' transaction.member.id %}" style="text-decoration:none;">{{ transaction.member }}</a></td>
+                            <td>{{ transaction.context }}</td>
+                            <td>{% if transaction.is_paid %}Paid{% else %}Not Paid{% endif %}</td>
+                            <td>{% if transaction.took_loan %}Yes{% else %}No{% endif %}</td>
+                            <td>{{ transaction.date|date }} at {{transaction.date|time}}</td>
+                            <td><a href="{% url 'member-transaction-detail' transaction.id %}" class='btn btn-primary'>View</a></td>
+                        </tr>
+                    {% empty %}
+                        <tr>
+                            <td colspan="5" class="text-center text-muted">No Transaction Record found.</td>
+                        </tr>
+                    {% endfor %}
+                    {% endif %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+{% endblock body %}
